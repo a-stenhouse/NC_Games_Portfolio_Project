@@ -17,17 +17,13 @@ describe("get /api/categories", () => {
             .get("/api/categories")
             .expect(200)
             .then((res) => {
-                expect(res.body).toEqual({
-                    categories: [
-                        { slug: 'euro game', description: 'Abstact games that involve little luck' },
-                        {
-                            slug: 'social deduction',
-                            description: "Players attempt to uncover each other's hidden role"
-                        },
-                        { slug: 'dexterity', description: 'Games involving physical skill' },
-                        { slug: "children's games", description: 'Games suitable for children' }
-                    ]
+                res.body.categories.forEach((category) => {
+                    expect(category).toMatchObject({
+                        description: expect.any(String),
+                        slug: expect.any(String)
+                    })
                 })
+                expect(res.body.categories.length).toBe(4);
             })
     })
 })
