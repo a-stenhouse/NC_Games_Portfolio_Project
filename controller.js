@@ -1,6 +1,5 @@
 const { app } = require("./app.js");
 const { fetchCategories, fetchReviews } = require("./models.js");
-const { addTotalComments } = require("./utils.js");
 
 exports.getCategories = (request, response, next) => {
     return fetchCategories()
