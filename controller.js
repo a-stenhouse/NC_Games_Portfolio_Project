@@ -1,5 +1,5 @@
 const { app } = require("./app.js");
-const { fetchCategories, fetchReviews } = require("./models.js");
+const { fetchCategories, fetchReviews, fetchReviewComments } = require("./models.js");
 
 exports.getCategories = (request, response, next) => {
     return fetchCategories()
@@ -12,3 +12,9 @@ exports.getReviews = (request, response, next) => {
         .then((reviews) => response.status(200).send({ reviews }))
         .catch(next);
 };
+
+exports.getReviewComments = (request, response, next) => {
+    return fetchReviewComments(request.params.review_id)
+        .then((comments) => response.status(200).send({ comments }))
+        .catch(next)
+}

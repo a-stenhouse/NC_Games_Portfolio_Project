@@ -28,8 +28,8 @@ describe("get /api/categories", () => {
     })
 })
 
-describe.only("get /api/reviews", () => {
-    test.only("responds with JSON containing an array of reviews with key of reviews", () => {
+describe("get /api/reviews", () => {
+    test("responds with JSON containing an array of reviews with key of reviews", () => {
         return request(app)
             .get("/api/reviews")
             .expect(200)
@@ -47,6 +47,42 @@ describe.only("get /api/reviews", () => {
                         comment_count: expect.any(Number)
                     })
                 })
+            })
+    })
+})
+
+describe("get /api/reviews/:review_id/comments", () => {
+    test("responds with JSON containig an array of comments assosciated with the given review_id", () => {
+        return request(app)
+            .get("/api/reviews/3/comments")
+            .expect(200)
+            .then((response) => {
+                response.body.comments.forEach((comment) => {
+                    expect(comment).toMatchObject({
+                        comment_id: expect.any(Number),
+                        votes: expect.any(Number),
+                        created_at: expect.any(String),
+                        author: expect.any(String),
+                        body: expect.any(String),
+                        review_id: 3,
+                    })
+                })
+            })
+    })
+    test("status:404, responds with an error message when no comments are found with the given review_id", () => {
+        return request(app)
+            .get("/api/reviews/1/comments")
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("No comments found with review_id: 1")
+            })
+    });
+    test("status:400, reponds with an error message when passed a bad review_id", () => {
+        return request(app)
+            .get("/api/reviews/notAReviewID/comments")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Bad request")
             })
     })
 })
