@@ -28,6 +28,43 @@ describe("get /api/categories", () => {
     })
 })
 
+describe("get /api/reviews/review_id", () => {
+    test("responds with JSON containing the expected review according to the review ID", () => {
+        return request(app)
+            .get("/api/reviews/1")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.review).toMatchObject({
+                    review_id: 1,
+                    title: "Agricola",
+                    review_body: 'Farmyard fun!',
+                    designer: 'Uwe Rosenberg',
+                    review_img_url: 'https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=700&h=700',
+                    votes: 1,
+                    category: 'euro game',
+                    owner: 'mallionaire',
+                    created_at: "2021-01-18T10:00:20.514Z"
+                })
+            })
+    });
+    test("status:400, responds with an error message when passed a bad review ID", () => {
+        return request(app)
+            .get("/api/reviews/notanID")
+            .expect(400)
+            .then((response) => {
+                expect(response.body).toEqual({ msg: "Not a valid review ID, must be a number" })
+            })
+    })
+    test("status:404, responds with an error message when passed a review ID that doesn't exist", () => {
+        return request(app)
+            .get("/api/reviews/5432534")
+            .expect(404)
+            .then((response) => {
+                expect(response.body).toEqual({ msg: "No review found with review_id: 5432534" })
+            })
+    })
+})
+
 describe("get /api/reviews", () => {
     test("responds with JSON containing an array of reviews with key of reviews", () => {
         return request(app)
