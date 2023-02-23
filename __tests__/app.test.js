@@ -28,8 +28,8 @@ describe("get /api/categories", () => {
     })
 })
 
-describe.only("get /api/reviews", () => {
-    test.only("responds with JSON containing an array of reviews with key of reviews", () => {
+describe("get /api/reviews", () => {
+    test("responds with JSON containing an array of reviews with key of reviews", () => {
         return request(app)
             .get("/api/reviews")
             .expect(200)
@@ -49,4 +49,76 @@ describe.only("get /api/reviews", () => {
                 })
             })
     })
+})
+
+describe("post /api/reviews/:review_id/comments", () => {
+    test("Inserts a new comment into the comments table from a body and user given in the request", () => {
+        const comment = {
+            username: "mallionaire",
+            body: "What a fun game!"
+        }
+        return request(app)
+            .post("/api/reviews/1/comments")
+            .send(comment)
+            .expect(201)
+            .then((response) => {
+                expect(response.body.comment).toMatchObject({
+                    comment_id: 7,
+                    body: "What a fun game!",
+                    review_id: 1,
+                    author: "mallionaire",
+                    votes: 0,
+                    created_at: "2023-02-23T11:11:46.000Z"
+                })
+            })
+    })
+    test("status:400, responds with an error message when passed a malformed body", () => {
+        return request(app)
+            .post("/api/reviews/1/comments")
+            .send({})
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Malformed body / missing required fields")
+            })
+    })
+    test("status:400, responds with an error message when passed a username that doesn't exist in the database", () => {
+        const comment = {
+            username: "arran",
+            body: "What a fun game!"
+        }
+        return request(app)
+            .post("/api/reviews/1/comments")
+            .send(comment)
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("Username does not exist in database")
+            })
+    })
+    test("status:400 responds with an error message when not given a valid review_id", () => {
+        const comment = {
+            username: "mallionaire",
+            body: "What a fun game!"
+        }
+        return request(app)
+            .post("/api/reviews/NotAReviewID/comments")
+            .send(comment)
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Not a valid review ID, must be a number")
+            })
+    })
+    test("status:400 responds with an error message when not given a valid review_id", () => {
+        const comment = {
+            username: "mallionaire",
+            body: "What a fun game!"
+        }
+        return request(app)
+            .post("/api/reviews/200/comments")
+            .send(comment)
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("Review_id does not exist in database")
+            })
+    })
+
 })
