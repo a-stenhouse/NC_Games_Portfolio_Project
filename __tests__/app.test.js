@@ -16,14 +16,14 @@ describe("get /api/categories", () => {
         return request(app)
             .get("/api/categories")
             .expect(200)
-            .then((res) => {
-                res.body.categories.forEach((category) => {
+            .then((response) => {
+                response.body.categories.forEach((category) => {
                     expect(category).toMatchObject({
                         description: expect.any(String),
                         slug: expect.any(String)
                     })
                 })
-                expect(res.body.categories.length).toBe(4);
+                expect(response.body.categories.length).toBe(4);
             })
     })
 })

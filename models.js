@@ -18,6 +18,11 @@ function fetchReviewID(reviewID) {
         });
 }
 
+function postingComment(username, body, reviewid) {
+    const date = new Date(1677150706000)
+    return db.query(`INSERT INTO comments (body, votes, author, review_id, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *;`, [body, 0, username, reviewid, date])
+        .then((result) => result.rows[0]);
+}
 
 
 module.exports = { fetchCategories, fetchReviewID }
