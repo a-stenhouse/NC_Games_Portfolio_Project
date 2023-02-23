@@ -103,7 +103,7 @@ describe("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Malformed body / missing required fields")
             })
     })
-    test("status:400, responds with an error message when passed a username that doesn't exist in the database", () => {
+    test("status:404, responds with an error message when passed a username that doesn't exist in the database", () => {
         const comment = {
             username: "arran",
             body: "What a fun game!"
@@ -129,7 +129,7 @@ describe("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Not a valid review ID, must be a number")
             })
     })
-    test("status:400 responds with an error message when not given a valid review_id", () => {
+    test("status:404 responds with an error message when not given a valid review_id", () => {
         const comment = {
             username: "mallionaire",
             body: "What a fun game!"
