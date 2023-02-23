@@ -14,7 +14,9 @@ exports.getReviews = (request, response, next) => {
 };
 
 exports.postComment = (request, response, next) => {
-    return postingComment(request)
+    const { username, body } = request.body
+    const review_id = request.params.review_id
+    return postingComment(username, body, review_id)
         .then((comment) => response.status(201).send({ comment }))
         .catch(next)
 }

@@ -72,6 +72,28 @@ describe("post /api/reviews/:review_id/comments", () => {
                 })
             })
     })
+    test("Inserts a new valid comment while ignoring unecessary properties", () => {
+        const comment = {
+            username: "mallionaire",
+            body: "What a fun game!",
+            fav_colour: "blue",
+            age: 25
+        }
+        return request(app)
+            .post("/api/reviews/1/comments")
+            .send(comment)
+            .expect(201)
+            .then((response) => {
+                expect(response.body.comment).toMatchObject({
+                    comment_id: 7,
+                    body: "What a fun game!",
+                    review_id: 1,
+                    author: "mallionaire",
+                    votes: 0,
+                    created_at: "2023-02-23T11:11:46.000Z"
+                })
+            })
+    })
     test("status:400, responds with an error message when passed a malformed body", () => {
         return request(app)
             .post("/api/reviews/1/comments")

@@ -14,11 +14,9 @@ function fetchReviews() {
         .then((result) => result.rows)
 }
 
-function postingComment(request) {
-    const { username, body } = request.body
-    const review_id = request.params.review_id
+function postingComment(username, body, reviewid) {
     const date = new Date(1677150706000)
-    return db.query(`INSERT INTO comments (body, votes, author, review_id, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *;`, [body, 0, username, review_id, date])
+    return db.query(`INSERT INTO comments (body, votes, author, review_id, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *;`, [body, 0, username, reviewid, date])
         .then((result) => result.rows[0]);
 }
 
