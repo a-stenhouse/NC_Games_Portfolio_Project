@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const { getCategories, getReviews, postComment, getReviewID, getReviewComments, patchVotes } = require("./controller.js")
+const { getCategories, getReviews, postComment, getReviewID, getReviewComments, patchVotes, getUsers } = require("./controller.js")
 
 app.use(express.json())
 
@@ -16,19 +16,7 @@ app.get("/api/reviews/:review_id", getReviewID)
 
 app.get("/api/reviews/:review_id/comments", getReviewComments)
 
-
-
-
-// app.use((err, req, res, next) => {
-//     if (err.status && err.msg) {
-//         res.status(err.status).send({ msg: err.msg })
-//     } else if (err.code === "22P02") {
-//         res.status(400).send({ msg: "Not a valid review_id / no. of votes" })
-//     } else {
-//         res.status(500).send("Server Error!")
-//     }
-// })
-
+app.get("/api/users", getUsers)
 
 app.use((err, req, res, next) => {
     if (err.code === "23502") {
@@ -46,9 +34,6 @@ app.use((err, req, res, next) => {
     } else {
         res.status(500).send("Server Error!")
     }
-
-
-
 })
 
 module.exports = { app };

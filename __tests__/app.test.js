@@ -146,11 +146,6 @@ describe("patch /api/reviews/:reviewid", () => {
     })
 })
 
-
-
-
-
-
 describe("get /api/reviews/:review_id/comments", () => {
     test("responds with JSON containing an array of comments assosciated with the given review_id", () => {
         return request(app)
@@ -285,6 +280,24 @@ describe("post /api/reviews/:review_id/comments", () => {
             .expect(404)
             .then((response) => {
                 expect(response.body.msg).toBe("Review_id does not exist in database")
+            })
+    })
+})
+
+describe("get /api/users", () => {
+    test("responds with a JSON containing the expected number of users and properties", () => {
+        return request(app)
+            .get("/api/users")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.users.length).toBe(4)
+                response.body.users.forEach((user) => {
+                    expect(user).toMatchObject({
+                        username: expect.any(String),
+                        name: expect.any(String),
+                        avatar_url: expect.any(String)
+                    })
+                })
             })
     })
 })
