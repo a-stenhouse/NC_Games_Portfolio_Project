@@ -88,6 +88,51 @@ describe("get /api/reviews", () => {
     })
 })
 
+describe("get /api/reviews/:review_id/comments", () => {
+    test("responds with JSON containing an array of comments assosciated with the given review_id", () => {
+        return request(app)
+            .get("/api/reviews/3/comments")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.comments.length).toBe(3)
+                response.body.comments.forEach((comment) => {
+                    expect(comment).toMatchObject({
+                        comment_id: expect.any(Number),
+                        votes: expect.any(Number),
+                        created_at: expect.any(String),
+                        author: expect.any(String),
+                        body: expect.any(String),
+                        review_id: 3,
+                    })
+                })
+            })
+    })
+    test("responds with JSON containing an empty array if called for a valid review with zero comments", () => {
+        return request(app)
+            .get("/api/reviews/1/comments")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.comments).toEqual([])
+            })
+    })
+    test("status:404, responds with an error message when a review_id that doesn't exist is called", () => {
+        return request(app)
+            .get("/api/reviews/100/comments")
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("No review found with review_id: 100")
+            })
+    });
+    test("status:400, reponds with an error message when passed a bad review_id", () => {
+        return request(app)
+            .get("/api/reviews/notAReviewID/comments")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Not a valid review ID, must be a number")
+            })
+    })
+})
+
 describe("post /api/reviews/:review_id/comments", () => {
     test("Inserts a new comment into the comments table from a body and user given in the request", () => {
         const comment = {
@@ -179,5 +224,4 @@ describe("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Review_id does not exist in database")
             })
     })
-
 })

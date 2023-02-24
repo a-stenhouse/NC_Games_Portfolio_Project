@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const { getCategories, getReviews, postComment, getReviewID } = require("./controller.js")
+const { getCategories, getReviews, postComment, getReviewID, getReviewComments } = require("./controller.js")
 
 app.use(express.json())
 
@@ -8,9 +8,12 @@ app.get("/api/categories", getCategories);
 
 app.get("/api/reviews", getReviews);
 
+app.post("/api/reviews/:review_id/comments", postComment)
+
 app.get("/api/reviews/:review_id", getReviewID)
 
-app.post("/api/reviews/:review_id/comments", postComment)
+app.get("/api/reviews/:review_id/comments", getReviewComments)
+
 
 app.use((err, req, res, next) => {
     if (err.code === "23502") {
@@ -30,13 +33,5 @@ app.use((err, req, res, next) => {
 
 
 })
-
-// app.use((err, req, res, next) => {
-
-//     else if (err.code === "22P02") {
-//         res.status(400).send({ msg: "Not a valid user ID" })
-//     }
-// })
-
 
 module.exports = { app };
