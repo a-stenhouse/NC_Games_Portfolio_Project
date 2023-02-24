@@ -71,4 +71,9 @@ function postingComment(username, body, reviewid) {
         .then((result) => result.rows[0]);
 }
 
-module.exports = { fetchCategories, fetchReviews, postingComment, fetchReviewID, fetchReviewComments, updateVotes }
+function fetchUsers() {
+    return db.query(`SELECT * FROM users;`)
+        .then((result) => result.rows)
+}
+
+module.exports = { fetchCategories, fetchReviews, postingComment, fetchReviewID, fetchReviewComments, updateVotes, fetchUsers }
