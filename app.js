@@ -28,7 +28,6 @@ app.use((err, req, res, next) => {
     } else if (err.code === "23503") {
         res.status(404).send({ msg: "Username does not exist in database" })
     } else if (err.code === "22P02") {
-        console.log(req)
         res.status(400)
             .send(Object.hasOwn(req.body, "inc_votes") ? { msg: "Not a valid review_id / no. of votes" } : { msg: "Not a valid review ID, must be a number" })
     } else {
