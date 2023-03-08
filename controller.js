@@ -1,4 +1,3 @@
-const { app } = require("./app.js");
 const { fetchCategories, fetchReviews, postingComment, fetchReviewID, fetchReviewComments, updateVotes, fetchUsers } = require("./models.js");
 
 exports.getCategories = (request, response, next) => {
