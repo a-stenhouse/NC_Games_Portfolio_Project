@@ -12,7 +12,8 @@ exports.getReviewID = (request, response, next) => {
         .catch(next);
 }
 exports.getReviews = (request, response, next) => {
-    return fetchReviews()
+    const category = request.query.category
+    return fetchReviews(category)
         .then((reviews) => response.status(200).send({ reviews }))
         .catch(next);
 };

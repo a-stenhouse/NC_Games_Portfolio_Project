@@ -17,13 +17,15 @@ function fetchReviewID(reviewID) {
             return result.rows[0];
         });
 }
-function fetchReviews() {
+function fetchReviews(category = "") {
     return db.query(`SELECT reviews.owner, reviews.title, reviews.review_id, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, reviews.designer, COUNT(comments.body)::INT AS comment_count
     FROM reviews
     LEFT JOIN comments ON reviews.review_id = comments.review_id
+    ${category ? `WHERE reviews.category='${category}' ` : ''} 
     GROUP BY reviews.review_id
     ORDER BY review_id ASC;`)
         .then((result) => result.rows)
+        .catch((err) => console.log(err))
 }
 
 function updateVotes(votes, reviewid) {

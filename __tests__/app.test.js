@@ -86,6 +86,27 @@ describe("get /api/reviews", () => {
                 })
             })
     })
+    test("responds with JSON containing an array of reviews that belong to a category specified in a query", () => {
+        return request(app)
+            .get("/api/reviews?category=social%20deduction")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.reviews.length).toBe(11)
+                response.body.reviews.forEach((review) => {
+                    expect(review).toMatchObject({
+                        owner: expect.any(String),
+                        title: expect.any(String),
+                        review_id: expect.any(Number),
+                        category: "social deduction",
+                        review_img_url: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        designer: expect.any(String),
+                        comment_count: expect.any(Number)
+                    })
+                })
+            })
+    })
 })
 
 describe("patch /api/reviews/:reviewid", () => {
