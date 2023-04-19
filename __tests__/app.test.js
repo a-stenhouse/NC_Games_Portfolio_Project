@@ -107,6 +107,27 @@ describe("get /api/reviews", () => {
                 })
             })
     })
+    test("responds with JSON containing reviews sorted in the correct way according to the query", () => {
+        return request(app)
+            .get("/api/reviews?sortBy=review_id&sortOrder=ASC")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.reviews.length).toBe(13)
+                response.body.reviews.forEach((review, index) => {
+                    expect(review).toMatchObject({
+                        owner: expect.any(String),
+                        title: expect.any(String),
+                        review_id: index + 1,
+                        category: expect.any(String),
+                        review_img_url: expect.any(String),
+                        created_at: expect.any(String),
+                        votes: expect.any(Number),
+                        designer: expect.any(String),
+                        comment_count: expect.any(Number)
+                    })
+                })
+            })
+    })
 })
 
 describe("patch /api/reviews/:reviewid", () => {
