@@ -52,7 +52,7 @@ describe("get /api/reviews/review_id", () => {
             .get("/api/reviews/notanID")
             .expect(400)
             .then((response) => {
-                expect(response.body).toEqual({ msg: "Not a valid review ID, must be a number" })
+                expect(response.body).toEqual({ msg: "Not a valid ID, must be a number" })
             })
     })
     test("status:404, responds with an error message when passed a review ID that doesn't exist", () => {
@@ -228,7 +228,7 @@ describe("get /api/reviews/:review_id/comments", () => {
             .get("/api/reviews/notAReviewID/comments")
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Not a valid review ID, must be a number")
+                expect(response.body.msg).toBe("Not a valid ID, must be a number")
             })
     })
 })
@@ -308,7 +308,7 @@ describe("post /api/reviews/:review_id/comments", () => {
             .send(comment)
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Not a valid review ID, must be a number")
+                expect(response.body.msg).toBe("Not a valid ID, must be a number")
             })
     })
     test("status:404 responds with an error message when not given a valid review_id", () => {
@@ -340,6 +340,30 @@ describe("get /api/users", () => {
                         avatar_url: expect.any(String)
                     })
                 })
+            })
+    })
+})
+
+describe("delete /api/comments/:comment_id", () => {
+    test("should delete the comment and respond with the deleted comment", () => {
+        return request(app)
+            .delete("/api/comments/3")
+            .expect(204)
+    })
+    test("status:400 should respond with an error message when passed an invalid comment_id", () => {
+        return request(app)
+            .delete("/api/comments/notanID")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Not a valid ID, must be a number")
+            })
+    })
+    test("status:404 should respond with an error message when passed a comment_id that doesn't exist", () => {
+        return request(app)
+            .delete("/api/comments/99999")
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("No comment found with comment_id: 99999")
             })
     })
 })

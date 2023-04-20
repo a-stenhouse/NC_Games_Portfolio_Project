@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require("cors")
-const { getCategories, getReviews, postComment, getReviewID, getReviewComments, patchVotes, getUsers } = require("./controller.js")
+const { getCategories, getReviews, postComment, getReviewID, getReviewComments, patchVotes, getUsers, deleteComment } = require("./controller.js")
 
 app.use(cors());
 
@@ -21,6 +21,8 @@ app.get("/api/reviews/:review_id/comments", getReviewComments)
 
 app.get("/api/users", getUsers)
 
+app.delete("/api/comments/:comment_id", deleteComment)
+
 app.use((err, req, res, next) => {
     if (err.code === "23502") {
         res.status(400).send({ msg: "Malformed body / missing required fields" })
@@ -32,7 +34,7 @@ app.use((err, req, res, next) => {
         res.status(404).send({ msg: "Username does not exist in database" })
     } else if (err.code === "22P02") {
         res.status(400)
-            .send(Object.hasOwn(req.body, "inc_votes") ? { msg: "Not a valid review_id / no. of votes" } : { msg: "Not a valid review ID, must be a number" })
+            .send(Object.hasOwn(req.body, "inc_votes") ? { msg: "Not a valid review_id / no. of votes" } : { msg: "Not a valid ID, must be a number" })
     } else {
         res.status(500).send("Server Error!")
     }
