@@ -250,7 +250,7 @@ describe("post /api/reviews/:review_id/comments", () => {
                     review_id: 1,
                     author: "mallionaire",
                     votes: 0,
-                    created_at: "2023-02-23T11:11:46.000Z"
+                    created_at: expect.any(String)
                 })
             })
     })
@@ -272,7 +272,7 @@ describe("post /api/reviews/:review_id/comments", () => {
                     review_id: 1,
                     author: "mallionaire",
                     votes: 0,
-                    created_at: "2023-02-23T11:11:46.000Z"
+                    created_at: expect.any(String)
                 })
             })
     })
