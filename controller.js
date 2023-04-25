@@ -1,4 +1,10 @@
-const { fetchCategories, fetchReviews, postingComment, fetchReviewID, fetchReviewComments, updateVotes, fetchUsers, removeComment } = require("./models.js");
+const { fetchEndpoints, fetchCategories, fetchReviews, postingComment, fetchReviewID, fetchReviewComments, updateVotes, fetchUsers, removeComment } = require("./models.js");
+
+console.log(fetchEndpoints())
+
+exports.getEndpoints = (request, response, next) => {
+    return response.status(200).send({ endpoints: fetchEndpoints() })
+}
 
 exports.getCategories = (request, response, next) => {
     return fetchCategories()
